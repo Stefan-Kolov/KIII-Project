@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:17.4
+    restart: always
+    environment:
+      POSTGRES_USER: boat
+      POSTGRES_PASSWORD: boat
+      POSTGRES_DB: boat-rental
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 2345:5432
+    networks:
+      - boatnet
+
+  backend:
+    build: ./boat-rental-backend
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/boat-rental
+      SPRING_DATASOURCE_USERNAME: boat
+      SPRING_DATASOURCE_PASSWORD: boat
+    ports:
+      - "8080:8080"
+    networks:
+      - boatnet
+
+  frontend:
+    build: ./boat-rental-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - boatnet
+
+volumes:
+  pgdata:
+
+networks:
+  boatnet:
