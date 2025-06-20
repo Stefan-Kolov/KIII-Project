@@ -1,16 +1,16 @@
-name: Docker CI/CD
+name: Build and Push Docker Images
 
 on:
   push:
     branches:
-      - main 
+      - main
 
 jobs:
-  docker:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
+      - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Log in to Docker Hub
@@ -19,9 +19,18 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build and push backend image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./boat-rental-backend
+          file: ./boat-rental-backend/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/boatrentalservice:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/boat-rental-backend:latest
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./boat-rental-frontend
+          file: ./boat-rental-frontend/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/boat-rental-frontend:latest
