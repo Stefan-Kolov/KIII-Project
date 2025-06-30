@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: boat-rental
+data:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/boat-rental
+  SPRING_DATASOURCE_USERNAME: boat
