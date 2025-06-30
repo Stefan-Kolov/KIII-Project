@@ -9,7 +9,7 @@ const HomePage = () => {
                     Welcome to Boat Rental App! 👋
                 </Typography>
                 <Typography variant="body1" sx={{ mb: 4 }}>
-                    This is the home page.
+                    This is the home page of KIII-Project.
                 </Typography>
             </Container>
         </Box>
